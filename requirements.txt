@@ -8,3 +8,4 @@ transformers
 torch
 sentencepiece
 wordcloud
+beautifulsoup4
