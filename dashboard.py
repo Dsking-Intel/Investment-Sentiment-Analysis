@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from collections import Counter
-import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
 matplotlib.rcParams['text.usetex'] = False
