@@ -117,7 +117,7 @@ def check_feed(url, source_name, is_json=False, json_key=None, timeout=5):
 # RUN ALL FEED CHECKS
 # ============================================================
 def run_all_feed_checks():
-    feeds = [
+        feeds = [
     # ============================
     # YAHOO FINANCE (TICKER RSS)
     # ============================
@@ -195,7 +195,7 @@ def run_all_feed_checks():
     # ============================
         ("https://www.reddit.com/r/wallstreetbets/.rss", "Reddit:WSB"),
         ("https://www.reddit.com/r/investing/.rss", "Reddit:Investing"),
-    ]
+        ]
 
     diagnostics = []
     all_headlines = []
