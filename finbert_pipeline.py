@@ -118,7 +118,6 @@ def check_feed(url, source_name, is_json=False, json_key=None, timeout=5):
 # ============================================================
 def run_all_feed_checks():
     feeds = [
-        feeds = [
     # ============================
     # YAHOO FINANCE (TICKER RSS)
     # ============================
@@ -306,7 +305,7 @@ def fetch_institutional_investor():
         return []
 
 
-    def fetch_techcrunch():
+def fetch_techcrunch():
     url = "https://techcrunch.com"
     headers = {"User-Agent": "Mozilla/5.0"}
     try:
@@ -314,7 +313,7 @@ def fetch_institutional_investor():
         soup = BeautifulSoup(r.text, "html.parser")
         return [f"[TechCrunch] {h.get_text(strip=True)}"
                 for h in soup.select("h2, h3") if len(h.get_text(strip=True)) > 20]
-    except:
+    except Exception:
         return []
 
 def fetch_venturebeat():
@@ -325,7 +324,7 @@ def fetch_venturebeat():
         soup = BeautifulSoup(r.text, "html.parser")
         return [f"[VentureBeat] {h.get_text(strip=True)}"
                 for h in soup.select("h2, h3") if len(h.get_text(strip=True)) > 20]
-    except:
+    except Exception:
         return []
 
 def fetch_oilprice():
@@ -347,7 +346,7 @@ def fetch_prnews():
         soup = BeautifulSoup(r.text, "html.parser")
         return [f"[PRNewswire] {h.get_text(strip=True)}"
                 for h in soup.select("h3") if len(h.get_text(strip=True)) > 20]
-    except:
+    except Exception:
         return []
 
 def fetch_nikkei():
@@ -358,7 +357,7 @@ def fetch_nikkei():
         soup = BeautifulSoup(r.text, "html.parser")
         return [f"[NikkeiAsia] {h.get_text(strip=True)}"
                 for h in soup.select("h3") if len(h.get_text(strip=True)) > 20]
-    except:
+    eexcept Exception:
         return []
 
 def fetch_scmp():
@@ -369,7 +368,7 @@ def fetch_scmp():
         soup = BeautifulSoup(r.text, "html.parser")
         return [f"[SCMP] {h.get_text(strip=True)}"
                 for h in soup.select("h3") if len(h.get_text(strip=True)) > 20]
-    except:
+    except Exception:
         return []
 
     
@@ -967,4 +966,5 @@ if __name__ == "__main__":
             print(f"  - {r['text']} (Relevance {r['relevance']:.3f})")
 
     plot_cluster_sentiment_heatmap(results, cluster_names)
+  
     export_results_to_csv(results, "finbert_results.csv")
