@@ -118,7 +118,10 @@ def check_feed(url, source_name, is_json=False, json_key=None, timeout=5):
 # ============================================================
 def run_all_feed_checks():
     feeds = [
-        # Yahoo Finance (working)
+        feeds = [
+    # ============================
+    # YAHOO FINANCE (TICKER RSS)
+    # ============================
         ("https://feeds.finance.yahoo.com/rss/2.0/headline?s=^FTSE&region=UK&lang=en-UK", "Yahoo:FTSE"),
         ("https://feeds.finance.yahoo.com/rss/2.0/headline?s=GOOG&region=US&lang=en-US", "Yahoo:GOOG"),
         ("https://feeds.finance.yahoo.com/rss/2.0/headline?s=AMZN&region=US&lang=en-US", "Yahoo:AMZN"),
@@ -131,28 +134,68 @@ def run_all_feed_checks():
         ("https://feeds.finance.yahoo.com/rss/2.0/headline?s=GC=F&region=US&lang=en-US", "Yahoo:Gold"),
         ("https://feeds.finance.yahoo.com/rss/2.0/headline?s=CL=F&region=US&lang=en-US", "Yahoo:CrudeOil"),
 
-        # Bloomberg alternatives (working)
+    # ============================
+    # BLOOMBERG ALTERNATIVES
+    # ============================
         ("https://www.bnnbloomberg.ca/polopoly_fs/1.3859769!/menu/rss.xml", "BNN Bloomberg"),
         ("https://www.bnnbloomberg.ca/polopoly_fs/1.2270499!/menu/rss.xml", "BNN Bloomberg Markets"),
         ("https://www.bnnbloomberg.ca/polopoly_fs/1.2270501!/menu/rss.xml", "BNN Bloomberg Investing"),
 
-        # Reuters alternatives (working)
-        ("https://www.msn.com/en-us/money/rss", "MSN Money (Reuters Partner)"),
-        ("https://www.msn.com/en-us/news/world/rss", "MSN World News (Reuters Partner)"),
-        ("https://www.msn.com/en-us/news/business/rss", "MSN Business (Reuters Partner)"),
+    # ============================
+    # REUTERS VIA MSN MIRRORS
+    # ============================
+        ("https://www.msn.com/en-us/money/rss", "MSN Money (Reuters)"),
+        ("https://www.msn.com/en-us/news/world/rss", "MSN World (Reuters)"),
+        ("https://www.msn.com/en-us/news/business/rss", "MSN Business (Reuters)"),
 
-        # Other working feeds
+    # ============================
+    # CORE FINANCIAL NEWS
+    # ============================
         ("https://www.marketwatch.com/rss/topstories", "MarketWatch"),
         ("https://www.investing.com/rss/news_25.rss", "Investing"),
         ("https://www.ft.com/?format=rss", "FT"),
         ("https://feeds.a.dj.com/rss/RSSMarketsMain.xml", "WSJ"),
-        ("http://feeds.bbci.co.uk/news/business/rss.xml", "BBC"),
+        ("http://feeds.bbci.co.uk/news/business/rss.xml", "BBC Business"),
         ("https://www.cnbc.com/id/100003114/device/rss/rss.html", "CNBC"),
         ("https://seekingalpha.com/feed.xml", "SeekingAlpha"),
 
-        # StockTwits JSON feeds
+    # ============================
+    # POLICY & REGULATORY SOURCES
+    # ============================
+        ("https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&output=atom", "SEC Filings"),
+        ("https://www.federalreserve.gov/feeds/press_all.xml", "Federal Reserve"),
+        ("https://www.ecb.europa.eu/rss/press.xml", "ECB"),
+        ("https://www.opec.org/opec_web/en/press_rss.xml", "OPEC"),
+
+    # ============================
+    # SECTOR-SPECIFIC SOURCES
+    # ============================
+        ("https://techcrunch.com/feed/", "TechCrunch"),
+        ("https://venturebeat.com/feed/", "VentureBeat"),
+        ("https://oilprice.com/rss/main", "OilPrice"),
+        ("https://www.coindesk.com/arc/outboundfeeds/rss/", "CoinDesk"),
+        ("https://cointelegraph.com/rss", "CoinTelegraph"),
+
+    # ============================
+    # GLOBAL MARKET SOURCES
+    # ============================
+        ("https://asia.nikkei.com/rss/feed/nar", "Nikkei Asia"),
+        ("https://www.scmp.com/rss/91/feed", "SCMP Business"),
+        ("https://www.theguardian.com/uk/business/rss", "Guardian Business"),
+
+    # ============================
+    # SOCIAL SENTIMENT (JSON)
+    # ============================
         ("https://api.stocktwits.com/api/2/streams/symbol/AAPL.json", "StockTwits:AAPL", True, "messages"),
         ("https://api.stocktwits.com/api/2/streams/symbol/TSLA.json", "StockTwits:TSLA", True, "messages"),
+        ("https://api.stocktwits.com/api/2/streams/symbol/NVDA.json", "StockTwits:NVDA", True, "messages"),
+        ("https://api.stocktwits.com/api/2/streams/symbol/SPY.json", "StockTwits:SPY", True, "messages"),
+
+    # ============================
+    # REDDIT (RSS MIRRORS)
+    # ============================
+        ("https://www.reddit.com/r/wallstreetbets/.rss", "Reddit:WSB"),
+        ("https://www.reddit.com/r/investing/.rss", "Reddit:Investing"),
     ]
 
     diagnostics = []
@@ -261,6 +304,74 @@ def fetch_institutional_investor():
 
     except Exception:
         return []
+
+
+    def fetch_techcrunch():
+    url = "https://techcrunch.com"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        return [f"[TechCrunch] {h.get_text(strip=True)}"
+                for h in soup.select("h2, h3") if len(h.get_text(strip=True)) > 20]
+    except:
+        return []
+
+def fetch_venturebeat():
+    url = "https://venturebeat.com"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        return [f"[VentureBeat] {h.get_text(strip=True)}"
+                for h in soup.select("h2, h3") if len(h.get_text(strip=True)) > 20]
+    except:
+        return []
+
+def fetch_oilprice():
+    url = "https://oilprice.com"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        return [f"[OilPrice] {h.get_text(strip=True)}"
+                for h in soup.select("h2, h3") if len(h.get_text(strip=True)) > 20]
+    except:
+        return []
+
+def fetch_prnews():
+    url = "https://www.prnewswire.com/news-releases/"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        return [f"[PRNewswire] {h.get_text(strip=True)}"
+                for h in soup.select("h3") if len(h.get_text(strip=True)) > 20]
+    except:
+        return []
+
+def fetch_nikkei():
+    url = "https://asia.nikkei.com"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        return [f"[NikkeiAsia] {h.get_text(strip=True)}"
+                for h in soup.select("h3") if len(h.get_text(strip=True)) > 20]
+    except:
+        return []
+
+def fetch_scmp():
+    url = "https://www.scmp.com/business"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        return [f"[SCMP] {h.get_text(strip=True)}"
+                for h in soup.select("h3") if len(h.get_text(strip=True)) > 20]
+    except:
+        return []
+
     
 # ============================================================
 # SANITISE HEADLINES
