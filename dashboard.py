@@ -2,6 +2,13 @@ import streamlit as st
 import pandas as pd
 from collections import Counter
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")
+matplotlib.rcParams['text.usetex'] = False
+matplotlib.rcParams['mathtext.default'] = 'regular'
+
+import matplotlib.pyplot as plt
+
 
 from finbert_pipeline import (
     run_all_feed_checks,
