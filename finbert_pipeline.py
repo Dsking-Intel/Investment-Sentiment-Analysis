@@ -117,7 +117,9 @@ def check_feed(url, source_name, is_json=False, json_key=None, timeout=5):
 # RUN ALL FEED CHECKS
 # ============================================================
 def run_all_feed_checks():
-        feeds = [
+    feeds = [
+
+
     # ============================
     # YAHOO FINANCE (TICKER RSS)
     # ============================
@@ -195,7 +197,7 @@ def run_all_feed_checks():
     # ============================
         ("https://www.reddit.com/r/wallstreetbets/.rss", "Reddit:WSB"),
         ("https://www.reddit.com/r/investing/.rss", "Reddit:Investing"),
-        ]
+    ]
 
     diagnostics = []
     all_headlines = []
@@ -308,6 +310,7 @@ def fetch_institutional_investor():
 def fetch_techcrunch():
     url = "https://techcrunch.com"
     headers = {"User-Agent": "Mozilla/5.0"}
+    
     try:
         r = requests.get(url, headers=headers, timeout=10)
         soup = BeautifulSoup(r.text, "html.parser")
@@ -357,7 +360,7 @@ def fetch_nikkei():
         soup = BeautifulSoup(r.text, "html.parser")
         return [f"[NikkeiAsia] {h.get_text(strip=True)}"
                 for h in soup.select("h3") if len(h.get_text(strip=True)) > 20]
-    eexcept Exception:
+    except Exception:
         return []
 
 def fetch_scmp():
