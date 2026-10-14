@@ -123,12 +123,26 @@ if st.button("Run Analysis"):
 
     ⚠️ Negative Headlines: {executive['negative']}
 
-    ### Top Headline
+    ---
+
+    ### Strongest Positive Signal
+
+    {executive['top_positive']}
+
+    ---
+
+    ### Biggest Risk
+
+    {executive['top_risk']}
+
+    ---
+
+    ### Most Relevant Headline
 
     {executive['top_headline']}
     """)
 
-    # Present
+    # Charts 1 & 2
     col1, col2 = st.columns(2)
 
     with col1:
@@ -221,25 +235,6 @@ if st.button("Run Analysis"):
 
         st.pyplot(fig_bar)
 
-
-# ============================
-# CLUSTER HEADLINES
-# ============================
-
-# st.subheader("🧠 AI Cluster Intelligence")
-
-# for cid in clusters:
-
-#     summary = generate_cluster_summary_llm(
-#         cluster_names[cid],
-#         clusters[cid],
-#         sentiment_cache
-#     )
-
-#     with st.expander(
-#         f"{cluster_names[cid]} ({len(clusters[cid])} headlines)"
-#     ):
-#         st.write(summary)
 
 # ============================
 # CSV FILE
