@@ -970,5 +970,13 @@ if __name__ == "__main__":
     plot_cluster_sentiment_heatmap(results, cluster_names)
   
     
-    export_results_to_csv(results,"C:/Users/darre/OneDrive/Doctorate/Python/finbert_results.csv"
+    export_results_to_csv(results,"finbert_results.csv"
+    )
+
+    with open("finbert_results.csv", "rb") as f:
+    st.download_button(
+        "Download CSV",
+        data=f,
+        file_name="finbert_results.csv",
+        mime="text/csv"
     )
