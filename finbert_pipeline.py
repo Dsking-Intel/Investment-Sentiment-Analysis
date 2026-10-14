@@ -61,10 +61,10 @@ def load_models():
         embed_model
     )
 
-tokenizer = None
-finbert = None
-embed_tokenizer = None
-embed_model = None
+    tokenizer = None
+    finbert = None
+    embed_tokenizer = None
+    embed_model = None
 
 # ============================================================
 # FEED HEALTH CHECK
