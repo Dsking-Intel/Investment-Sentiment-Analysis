@@ -194,20 +194,20 @@ if st.button("Run Analysis"):
 # CLUSTER HEADLINES
 # ============================
 
-    st.subheader("🧠 AI Cluster Intelligence")
+# st.subheader("🧠 AI Cluster Intelligence")
 
-    for cid in clusters:
+# for cid in clusters:
 
-        summary = generate_cluster_summary_llm(
-            cluster_names[cid],
-            clusters[cid],
-            sentiment_cache
-        )
+#     summary = generate_cluster_summary_llm(
+#         cluster_names[cid],
+#         clusters[cid],
+#         sentiment_cache
+#     )
 
-        with st.expander(
-            f"{cluster_names[cid]} ({len(clusters[cid])} headlines)"
-        ):
-            st.write(summary)
+#     with st.expander(
+#         f"{cluster_names[cid]} ({len(clusters[cid])} headlines)"
+#     ):
+#         st.write(summary)
 
 # ============================
 # CSV FILE
