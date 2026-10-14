@@ -190,7 +190,28 @@ if st.button("Run Analysis"):
         st.pyplot(fig_bar)
 
 
+# ============================
+# CLUSTER HEADLINES
+# ============================
 
+    st.subheader("🧠 AI Cluster Intelligence")
+
+    for cid in clusters:
+
+        summary = generate_cluster_summary_llm(
+            cluster_names[cid],
+            clusters[cid],
+            sentiment_cache
+        )
+
+        with st.expander(
+            f"{cluster_names[cid]} ({len(clusters[cid])} headlines)"
+        ):
+            st.write(summary)
+
+# ============================
+# CSV FILE
+# ============================
 
     csv = df.to_csv(index=False).encode("utf-8")
 
