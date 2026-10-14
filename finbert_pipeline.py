@@ -43,7 +43,7 @@ embed_model = AutoModel.from_pretrained("BAAI/bge-large-en-v1.5").to(device)
 
 summary_model = pipeline(
     "text2text-generation",
-    model="google/flan-t5-base",
+    model="google/flan-t5-small",
     device=0 if torch.cuda.is_available() else -1
 )
 
@@ -453,7 +453,7 @@ def compute_embeddings(headlines, batch_size=64):
     emb_dict = {}
     for i in range(0, len(headlines), batch_size):
         batch = headlines[i:i+batch_size]
-        inputs = tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
+        inputs = embed_tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
 
@@ -580,7 +580,7 @@ def name_clusters(clusters, emb_cache):
 def compute_topic_embeddings():
     topic_embs = {}
     for topic, phrases in semantic_topics.items():
-        inputs = tokenizer(
+        inputs = embed_tokenizer(
             phrases,
             return_tensors="pt",
             truncation=True,
