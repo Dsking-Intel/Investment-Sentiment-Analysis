@@ -35,7 +35,7 @@ if st.button("Run Analysis"):
     # Fetch + clean headlines
     diagnostics, combined = run_all_feed_checks()
     combined = sanitize_headlines(dedupe_headlines(combined))
-    combined = combined[:150]
+    combined = combined[:100]
     st.info(f"Fetched {len(combined)} headlines from all sources.")
 
     # Show feed diagnostics in Streamlit
@@ -59,7 +59,7 @@ if st.button("Run Analysis"):
 
     # Clustering
     vectors = list(emb_cache.values())
-    n_clusters = min(6, len(vectors))
+    n_clusters = min(4, len(vectors))
 
     from sklearn.cluster import KMeans
     kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(vectors)
@@ -127,17 +127,17 @@ if st.button("Run Analysis"):
 
         st.markdown("### 🚀 Strongest Positive Signals")
 
-        for item in executive["strongest_signals"\]:
+        for item in executive["strongest_signals"]:
             st.write("•", item["text"])
 
         st.markdown("### ⚠️ Biggest Risks")
 
-        for item in executive["biggest_risks"\]:
+        for item in executive["biggest_risks"]:
             st.write("•", item["text"])
 
         st.markdown("### 🎯 Most Relevant Headlines")
 
-        for item in executive["most_relevant"\]:
+        for item in executive["most_relevant"]:
             st.write("•", item["text"])
 
     # Charts 1 & 2
