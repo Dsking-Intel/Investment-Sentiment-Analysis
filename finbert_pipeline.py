@@ -16,6 +16,7 @@ matplotlib.rcParams['figure.autolayout'] = False
 import matplotlib.pyplot as plt
 import numpy as np
 from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassification
+from transformers import pipeline
 import torch.nn.functional as F
 import re
 from collections import Counter
@@ -40,6 +41,11 @@ LABELS = ["negative", "neutral", "positive"]
 embed_tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5")
 embed_model = AutoModel.from_pretrained("BAAI/bge-large-en-v1.5").to(device)
 
+summary_model = pipeline(
+    "text2text-generation",
+    model="google/flan-t5-base",
+    device=0 if torch.cuda.is_available() else -1
+)
 
 # ============================================================
 # FEED HEALTH CHECK
@@ -746,6 +752,40 @@ def _strip_dollar_signs(fig):
             if txt and "$" in txt:
                 t.set_text(txt.replace("$", ""))
 
+# ============================================================
+# CLUSTER SUMMARY
+# ============================================================
+
+def generate_cluster_summary_llm(
+    cluster_name,
+    headlines,
+    sentiment_cache
+):
+    text = "\n".join(headlines[:10])
+
+    prompt = f"""
+    You are a financial analyst.
+
+    Topic: {cluster_name}
+
+    Headlines:
+    {text}
+
+    Summarise:
+    1. Main theme
+    2. Market implications
+    3. Overall sentiment
+
+    Keep the answer under 100 words.
+    """
+
+    result = summary_model(
+        prompt,
+        max_new_tokens=120,
+        do_sample=False
+    )
+
+    return result[0]["generated_text"]
 
 # ============================================================
 # CLUSTER SENTIMENT HEATMAP
