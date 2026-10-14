@@ -16,7 +16,7 @@ matplotlib.rcParams['figure.autolayout'] = False
 import matplotlib.pyplot as plt
 import numpy as np
 from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassification
-from transformers import pipeline
+#from transformers import pipeline
 import torch.nn.functional as F
 import re
 from collections import Counter
@@ -757,11 +757,11 @@ def _strip_dollar_signs(fig):
 # CLUSTER SUMMARY
 # ============================================================
 
-def generate_cluster_summary_llm(
+#def generate_cluster_summary_llm(
     cluster_name,
     headlines,
     sentiment_cache
-):
+#):
     text = "\n".join(headlines[:10])
 
     prompt = f"""
