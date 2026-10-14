@@ -37,8 +37,8 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 finbert = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME).to(device)
 LABELS = ["negative", "neutral", "positive"]
 
-embed_tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
-embed_model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2").to(device)
+embed_tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5")
+embed_model = AutoModel.from_pretrained("BAAI/bge-large-en-v1.5").to(device)
 
 
 # ============================================================
@@ -668,8 +668,7 @@ def analyse_all(question, headlines, cluster_map, cluster_names, emb_cache, sent
     for h in headlines:
         sent = sentiment_cache[h]
         cosine = compute_relevance(question_emb, emb_cache[h])
-        length_penalty = 1 - abs(len(question) - len(h)) / max(len(question), len(h))
-        relevance = cosine * length_penalty
+        relevance = cosine
 
         contradiction = detect_contradiction(question_label, sent["label"], relevance)
 
