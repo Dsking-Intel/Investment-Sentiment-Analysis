@@ -38,15 +38,13 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 finbert = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME).to(device)
 LABELS = ["negative", "neutral", "positive"]
 
-embed_tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5")
-embed_model = AutoModel.from_pretrained("BAAI/bge-large-en-v1.5").to(device)
+eembed_tokenizer = AutoTokenizer.from_pretrained(
+    "sentence-transformers/all-MiniLM-L6-v2"
+)
 
-#summary_model = pipeline(
-#    task="summarization",
-#    model="google/flan-t5-small",
-#    device=0 if torch.cuda.is_available() else -1
-#)
-
+embed_model = AutoModel.from_pretrained(
+    "sentence-transformers/all-MiniLM-L6-v2"
+).to(device)
 
 # ============================================================
 # FEED HEALTH CHECK
