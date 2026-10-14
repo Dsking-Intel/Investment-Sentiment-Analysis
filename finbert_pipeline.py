@@ -612,7 +612,7 @@ def compute_topic_embeddings():
 
     return topic_embs
 
-topic_embeddings = compute_topic_embeddings()
+topic_embeddings = {}
 
 
 def compute_cluster_centroid(cluster_headlines, emb_cache):
