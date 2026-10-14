@@ -447,7 +447,7 @@ def compute_embeddings(headlines, batch_size=64):
     emb_dict = {}
     for i in range(0, len(headlines), batch_size):
         batch = headlines[i:i+batch_size]
-        inputs = embed_tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
+        inputs = tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
 
@@ -465,7 +465,7 @@ def compute_embeddings(headlines, batch_size=64):
 # FINBERT SENTIMENT
 # ============================================================
 def analyze_financial_sentiment(text):
-    inputs = embed_tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(device)
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(device)
     with torch.no_grad():
         logits = finbert(**inputs).logits
         probs = torch.softmax(logits, dim=-1)
@@ -476,7 +476,7 @@ def compute_sentiments(headlines, batch_size=64):
     results = {}
     for i in range(0, len(headlines), batch_size):
         batch = headlines[i:i+batch_size]
-        inputs = embed_tokenizer(
+        inputs = tokenizer(
             batch,
             return_tensors="pt",
             truncation=True,
@@ -571,7 +571,7 @@ def name_clusters(clusters, emb_cache):
 def compute_topic_embeddings():
     topic_embs = {}
     for topic, phrases in semantic_topics.items():
-        inputs = embed_tokenizer(
+        inputs = tokenizer(
             phrases,
             return_tensors="pt",
             truncation=True,
@@ -702,7 +702,7 @@ def generate_feedback(label, confidence):
 # CSV EXPORT
 # ============================================================
 def export_results_to_csv(results, filename):
-    fieldnames = ["text","label","confidence","feedback","relevance","contradiction","cluster","cluster_name","error"]
+    fieldnames = ["text","label","confidence","feedback","relevance","positive_prob","neutral_prob","negative_prob","contradiction","cluster","cluster_name","error"]
     with open(filename, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
