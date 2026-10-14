@@ -957,31 +957,34 @@ def generate_executive_summary(results, clusters, cluster_names):
 
     largest_cluster = cluster_names[largest_cluster_id]
 
-    top_headline = max(
+    strongest_signals = sorted(
         results,
-        key=lambda x: x["relevance"]
-    )
+        key=lambda x: x["positive_prob"] * x["relevance"],
+        reverse=True
+    )[:3]
 
-    top_positive = max(
+    biggest_risks = sorted(
         results,
-        key=lambda x: x["positive_prob"] * x["relevance"]
-    )
+        key=lambda x: x["negative_prob"] * x["relevance"],
+        reverse=True
+    )[:3]
 
-    top_risk = max(
+    most_relevant = sorted(
         results,
-        key=lambda x: x["negative_prob"] * x["relevance"]
-    )
+        key=lambda x: x["relevance"],
+        reverse=True
+    )[:3]
 
     return {
         "total_headlines": total_headlines,
         "overall_sentiment": overall_sentiment,
         "largest_cluster": largest_cluster,
-        "top_headline": top_headline["text"],
-        "top_positive": top_positive["text"],
-        "top_risk": top_risk["text"],
         "positive": positive,
         "neutral": neutral,
-        "negative": negative
+        "negative": negative,
+        "strongest_signals": strongest_signals,
+        "biggest_risks": biggest_risks,
+        "most_relevant": most_relevant
     }
 
 # ============================================================
