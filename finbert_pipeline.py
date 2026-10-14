@@ -42,10 +42,11 @@ embed_tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5")
 embed_model = AutoModel.from_pretrained("BAAI/bge-large-en-v1.5").to(device)
 
 summary_model = pipeline(
-    "text2text-generation",
+    task="summarization",
     model="google/flan-t5-small",
     device=0 if torch.cuda.is_available() else -1
 )
+
 
 # ============================================================
 # FEED HEALTH CHECK
