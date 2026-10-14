@@ -192,5 +192,11 @@ if st.button("Run Analysis"):
 
 
 
-    export_results_to_csv(ranked, "finbert_results.csv")
-    st.success("CSV updated!")
+    csv = df.to_csv(index=False).encode("utf-8")
+
+    st.download_button(
+        label="Download CSV",
+        data=csv,
+        file_name="finbert_results.csv",
+        mime="text/csv"
+    )
