@@ -170,15 +170,15 @@ if st.button("Run Analysis"):
         st.pyplot(fig_box)
         plt.close(fig_box)
 
-    st.subheader("Cluster Keyword Clouds")
-    cols = st.columns(3)
-
-    for i, cid in enumerate(range(n_clusters)):
-        with cols[i % 3]:
-            st.markdown(f"### {cluster_names[cid]}")
-            fig = plot_cluster_keyword_cloud({cid: clusters[cid]}, cluster_names)
-            st.pyplot(fig)
-            plt.close(fig)
+#    st.subheader("Cluster Keyword Clouds")
+#    cols = st.columns(3)
+#
+#    for i, cid in enumerate(range(n_clusters)):
+#        with cols[i % 3]:
+#            st.markdown(f"### {cluster_names[cid]}")
+#            fig = plot_cluster_keyword_cloud({cid: clusters[cid]}, cluster_names)
+#            st.pyplot(fig)
+#            plt.close(fig)
 
     # Source Contribution (pie)
 # ============================
