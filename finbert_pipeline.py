@@ -38,13 +38,9 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 finbert = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME).to(device)
 LABELS = ["negative", "neutral", "positive"]
 
-eembed_tokenizer = AutoTokenizer.from_pretrained(
-    "sentence-transformers/all-MiniLM-L6-v2"
-)
+eembed_tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
 
-embed_model = AutoModel.from_pretrained(
-    "sentence-transformers/all-MiniLM-L6-v2"
-).to(device)
+embed_model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2").to(device)
 
 # ============================================================
 # FEED HEALTH CHECK
