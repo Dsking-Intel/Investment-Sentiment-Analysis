@@ -7,7 +7,6 @@ matplotlib.rcParams['text.usetex'] = False
 matplotlib.rcParams['mathtext.default'] = 'regular'
 
 import matplotlib.pyplot as plt
-generate_executive_summary
 
 from finbert_pipeline import (
     run_all_feed_checks,
@@ -17,7 +16,7 @@ from finbert_pipeline import (
     compute_sentiments,
     analyse_all,
     name_clusters,
-    generate_executive_summary
+    generate_executive_summary,
     plot_cluster_sentiment_heatmap,
     plot_relevance_vs_sentiment,
     plot_cluster_sentiment_distribution,
@@ -99,15 +98,6 @@ if st.button("Run Analysis"):
 
     # Executive Summary
     
-    results = analyse_all(
-    question,
-    combined,
-    cluster_map,
-    cluster_names,
-    emb_cache,
-    sentiment_cache
-    )
-
     executive = generate_executive_summary(
     results,
     clusters,
@@ -116,25 +106,27 @@ if st.button("Run Analysis"):
 
     st.subheader("📈 Executive Market Brief")
 
-    st.info(
-        f"""Overall market sentiment is **{executive['overall_sentiment']}**.
+    with st.container(border=True):
 
-        Analysed **{executive['total_headlines']}** headlines.
+        st.markdown(f"""
+    ### Market Overview
 
-        Dominant market theme:
-        **{executive['largest_cluster']}**
+    **Overall Sentiment:** {executive['overall_sentiment']}
 
-        Positive headlines: **{executive['positive']}**
+    **Headlines Analysed:** {executive['total_headlines']}
 
-        Neutral headlines: **{executive['neutral']}**
+    **Dominant Theme:** {executive['largest_cluster']}
 
-        Negative headlines: **{executive['negative']}**
+    ✅ Positive Headlines: {executive['positive']}
 
-        Most relevant headline:
+    ➖ Neutral Headlines: {executive['neutral']}
 
-        {executive['top_headline']}
-        """
-    )
+    ⚠️ Negative Headlines: {executive['negative']}
+
+    ### Top Headline
+
+    {executive['top_headline']}
+    """)
 
     # Present
     col1, col2 = st.columns(2)
