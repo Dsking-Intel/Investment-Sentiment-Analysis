@@ -918,10 +918,6 @@ def plot_cluster_keyword_cloud(clusters, cluster_names):
 # EXECUTIVE SUMMARY
 # ============================================================
 
-# ============================================================
-# EXECUTIVE SUMMARY
-# ============================================================
-
 def generate_executive_summary(results, clusters, cluster_names):
 
     total_headlines = len(results)
@@ -966,11 +962,23 @@ def generate_executive_summary(results, clusters, cluster_names):
         key=lambda x: x["relevance"]
     )
 
+    top_positive = max(
+        results,
+        key=lambda x: x["positive_prob"] * x["relevance"]
+    )
+
+    top_risk = max(
+        results,
+        key=lambda x: x["negative_prob"] * x["relevance"]
+    )
+
     return {
         "total_headlines": total_headlines,
         "overall_sentiment": overall_sentiment,
         "largest_cluster": largest_cluster,
         "top_headline": top_headline["text"],
+        "top_positive": top_positive["text"],
+        "top_risk": top_risk["text"],
         "positive": positive,
         "neutral": neutral,
         "negative": negative
