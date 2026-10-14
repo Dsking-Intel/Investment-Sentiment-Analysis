@@ -33,14 +33,35 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # ============================================================
 # LOAD MODELS
 # ============================================================
-MODEL_NAME = "ProsusAI/finbert"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-finbert = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME).to(device)
-LABELS = ["negative", "neutral", "positive"]
+import streamlit as st
 
-eembed_tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+@st.cache_resource
+def load_models():
 
-embed_model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2").to(device)
+    tokenizer = AutoTokenizer.from_pretrained(
+        "ProsusAI/finbert"
+    )
+
+    finbert = AutoModelForSequenceClassification.from_pretrained(
+        "ProsusAI/finbert"
+    ).to(device)
+
+    embed_tokenizer = AutoTokenizer.from_pretrained(
+        "BAAI/bge-large-en-v1.5"
+    )
+
+    embed_model = AutoModel.from_pretrained(
+        "BAAI/bge-large-en-v1.5"
+    ).to(device)
+
+    return (
+        tokenizer,
+        finbert,
+        embed_tokenizer,
+        embed_model
+    )
+
+tokenizer, finbert, embed_tokenizer, embed_model = load_models()
 
 # ============================================================
 # FEED HEALTH CHECK
