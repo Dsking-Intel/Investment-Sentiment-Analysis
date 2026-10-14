@@ -122,25 +122,22 @@ if st.button("Run Analysis"):
     ➖ Neutral Headlines: {executive['neutral']}
 
     ⚠️ Negative Headlines: {executive['negative']}
-
-    ---
-
-    ### Strongest Positive Signal
-
-    {executive['top_positive']}
-
-    ---
-
-    ### Biggest Risk
-
-    {executive['top_risk']}
-
-    ---
-
-    ### Most Relevant Headline
-
-    {executive['top_headline']}
     """)
+
+        st.markdown("### 🚀 Strongest Positive Signals")
+
+        for item in executive["strongest_signals"\]:
+            st.write("•", item["text"])
+
+        st.markdown("### ⚠️ Biggest Risks")
+
+        for item in executive["biggest_risks"\]:
+            st.write("•", item["text"])
+
+        st.markdown("### 🎯 Most Relevant Headlines")
+
+        for item in executive["most_relevant"\]:
+            st.write("•", item["text"])
 
     # Charts 1 & 2
     col1, col2 = st.columns(2)
