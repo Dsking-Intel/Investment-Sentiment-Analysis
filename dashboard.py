@@ -7,7 +7,7 @@ matplotlib.rcParams['text.usetex'] = False
 matplotlib.rcParams['mathtext.default'] = 'regular'
 
 import matplotlib.pyplot as plt
-
+generate_executive_summary
 
 from finbert_pipeline import (
     run_all_feed_checks,
@@ -17,6 +17,7 @@ from finbert_pipeline import (
     compute_sentiments,
     analyse_all,
     name_clusters,
+    generate_executive_summary
     plot_cluster_sentiment_heatmap,
     plot_relevance_vs_sentiment,
     plot_cluster_sentiment_distribution,
@@ -95,6 +96,45 @@ if st.button("Run Analysis"):
     ranked = sorted(results, key=lambda x: x["relevance"], reverse=True)
 
     df = pd.DataFrame(ranked)
+
+    # Executive Summary
+    
+    results = analyse_all(
+    question,
+    combined,
+    cluster_map,
+    cluster_names,
+    emb_cache,
+    sentiment_cache
+    )
+
+    executive = generate_executive_summary(
+    results,
+    clusters,
+    cluster_names
+    )
+
+    st.subheader("📈 Executive Market Brief")
+
+    st.info(
+        f"""Overall market sentiment is **{executive['overall_sentiment']}**.
+
+        Analysed **{executive['total_headlines']}** headlines.
+
+        Dominant market theme:
+        **{executive['largest_cluster']}**
+
+        Positive headlines: **{executive['positive']}**
+
+        Neutral headlines: **{executive['neutral']}**
+
+        Negative headlines: **{executive['negative']}**
+
+        Most relevant headline:
+
+        {executive['top_headline']}
+        """
+    )
 
     # Present
     col1, col2 = st.columns(2)
