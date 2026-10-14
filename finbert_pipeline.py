@@ -491,7 +491,10 @@ def compute_sentiments(headlines, batch_size=64):
             idx = torch.argmax(p).item()
             results[h] = {
                 "label": LABELS[idx],
-                "confidence": float(p[idx])
+                "confidence": float(p[idx]),
+                "negative_prob": float(p[0]),
+                "neutral_prob": float(p[1]),
+                "positive_prob": float(p[2])
             }
 
     return results
@@ -678,6 +681,9 @@ def analyse_all(question, headlines, cluster_map, cluster_names, emb_cache, sent
             "confidence": sent["confidence"],
             "feedback": generate_feedback(sent["label"], sent["confidence"]),
             "relevance": relevance,
+            "positive_prob": sent["positive_prob"],
+            "neutral_prob": sent["neutral_prob"],
+            "negative_prob": sent["negative_prob"],
             "contradiction": contradiction,
             "cluster": cluster_map[h],
             "cluster_name": cluster_names[cluster_map[h]],
