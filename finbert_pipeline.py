@@ -42,9 +42,9 @@ embed_tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5")
 embed_model = AutoModel.from_pretrained("BAAI/bge-large-en-v1.5").to(device)
 
 #summary_model = pipeline(
-    task="summarization",
-    model="google/flan-t5-small",
-    device=0 if torch.cuda.is_available() else -1
+#    task="summarization",
+#    model="google/flan-t5-small",
+#    device=0 if torch.cuda.is_available() else -1
 #)
 
 
@@ -758,9 +758,9 @@ def _strip_dollar_signs(fig):
 # ============================================================
 
 #def generate_cluster_summary_llm(
-    cluster_name,
-    headlines,
-    sentiment_cache
+#    cluster_name,
+#    headlines,
+#    sentiment_cache
 #):
     text = "\n".join(headlines[:10])
 
