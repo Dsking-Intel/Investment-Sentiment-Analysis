@@ -915,6 +915,68 @@ def plot_cluster_keyword_cloud(clusters, cluster_names):
     return fig
 
 # ============================================================
+# EXECUTIVE SUMMARY
+# ============================================================
+
+# ============================================================
+# EXECUTIVE SUMMARY
+# ============================================================
+
+def generate_executive_summary(results, clusters, cluster_names):
+
+    total_headlines = len(results)
+
+    positive = sum(
+        1 for r in results
+        if r["label"] == "positive"
+    )
+
+    neutral = sum(
+        1 for r in results
+        if r["label"] == "neutral"
+    )
+
+    negative = sum(
+        1 for r in results
+        if r["label"] == "negative"
+    )
+
+    overall_sentiment = max(
+        {
+            "Positive": positive,
+            "Neutral": neutral,
+            "Negative": negative
+        },
+        key=lambda x: {
+            "Positive": positive,
+            "Neutral": neutral,
+            "Negative": negative
+        }[x]
+    )
+
+    largest_cluster_id = max(
+        clusters,
+        key=lambda c: len(clusters[c])
+    )
+
+    largest_cluster = cluster_names[largest_cluster_id]
+
+    top_headline = max(
+        results,
+        key=lambda x: x["relevance"]
+    )
+
+    return {
+        "total_headlines": total_headlines,
+        "overall_sentiment": overall_sentiment,
+        "largest_cluster": largest_cluster,
+        "top_headline": top_headline["text"],
+        "positive": positive,
+        "neutral": neutral,
+        "negative": negative
+    }
+
+# ============================================================
 # MAIN
 # ============================================================
 if __name__ == "__main__":
