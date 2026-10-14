@@ -447,7 +447,7 @@ def compute_embeddings(headlines, batch_size=64):
     emb_dict = {}
     for i in range(0, len(headlines), batch_size):
         batch = headlines[i:i+batch_size]
-        inputs = tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
+        inputs = embed_tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
 
@@ -465,7 +465,7 @@ def compute_embeddings(headlines, batch_size=64):
 # FINBERT SENTIMENT
 # ============================================================
 def analyze_financial_sentiment(text):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(device)
+    inputs = embed_tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(device)
     with torch.no_grad():
         logits = finbert(**inputs).logits
         probs = torch.softmax(logits, dim=-1)
@@ -476,7 +476,7 @@ def compute_sentiments(headlines, batch_size=64):
     results = {}
     for i in range(0, len(headlines), batch_size):
         batch = headlines[i:i+batch_size]
-        inputs = tokenizer(
+        inputs = embed_tokenizer(
             batch,
             return_tensors="pt",
             truncation=True,
