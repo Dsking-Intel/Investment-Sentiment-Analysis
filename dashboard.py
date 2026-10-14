@@ -16,7 +16,6 @@ from finbert_pipeline import (
     compute_sentiments,
     analyse_all,
     name_clusters,
-    generate_executive_summary,
     plot_cluster_sentiment_heatmap,
     plot_relevance_vs_sentiment,
     plot_cluster_sentiment_distribution,
@@ -35,7 +34,7 @@ if st.button("Run Analysis"):
     # Fetch + clean headlines
     diagnostics, combined = run_all_feed_checks()
     combined = sanitize_headlines(dedupe_headlines(combined))
-    combined = combined[:100]
+    combined = combined[:150]
     st.info(f"Fetched {len(combined)} headlines from all sources.")
 
     # Show feed diagnostics in Streamlit
@@ -59,7 +58,7 @@ if st.button("Run Analysis"):
 
     # Clustering
     vectors = list(emb_cache.values())
-    n_clusters = min(4, len(vectors))
+    n_clusters = min(6, len(vectors))
 
     from sklearn.cluster import KMeans
     kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(vectors)
@@ -97,50 +96,7 @@ if st.button("Run Analysis"):
 
     df = pd.DataFrame(ranked)
 
-    # Executive Summary
-    
-    executive = generate_executive_summary(
-    results,
-    clusters,
-    cluster_names
-    )
-
-    st.subheader("📈 Executive Market Brief")
-
-    with st.container(border=True):
-
-        st.markdown(f"""
-    ### Market Overview
-
-    **Overall Sentiment:** {executive['overall_sentiment']}
-
-    **Headlines Analysed:** {executive['total_headlines']}
-
-    **Dominant Theme:** {executive['largest_cluster']}
-
-    ✅ Positive Headlines: {executive['positive']}
-
-    ➖ Neutral Headlines: {executive['neutral']}
-
-    ⚠️ Negative Headlines: {executive['negative']}
-    """)
-
-        st.markdown("### 🚀 Strongest Positive Signals")
-
-        for item in executive["strongest_signals"]:
-            st.write("•", item["text"])
-
-        st.markdown("### ⚠️ Biggest Risks")
-
-        for item in executive["biggest_risks"]:
-            st.write("•", item["text"])
-
-        st.markdown("### 🎯 Most Relevant Headlines")
-
-        for item in executive["most_relevant"]:
-            st.write("•", item["text"])
-
-    # Charts 1 & 2
+    # Present
     col1, col2 = st.columns(2)
 
     with col1:
@@ -170,15 +126,15 @@ if st.button("Run Analysis"):
         st.pyplot(fig_box)
         plt.close(fig_box)
 
-#    st.subheader("Cluster Keyword Clouds")
-#    cols = st.columns(3)
-#
-#    for i, cid in enumerate(range(n_clusters)):
-#        with cols[i % 3]:
-#            st.markdown(f"### {cluster_names[cid]}")
-#            fig = plot_cluster_keyword_cloud({cid: clusters[cid]}, cluster_names)
-#            st.pyplot(fig)
-#            plt.close(fig)
+    st.subheader("Cluster Keyword Clouds")
+    cols = st.columns(3)
+
+    for i, cid in enumerate(range(n_clusters)):
+        with cols[i % 3]:
+            st.markdown(f"### {cluster_names[cid]}")
+            fig = plot_cluster_keyword_cloud({cid: clusters[cid]}, cluster_names)
+            st.pyplot(fig)
+            plt.close(fig)
 
     # Source Contribution (pie)
 # ============================
@@ -241,15 +197,7 @@ if st.button("Run Analysis"):
         plt.close(fig_bar)
 
 
-# ============================
-# CSV FILE
-# ============================
 
-    csv = df.to_csv(index=False).encode("utf-8")
 
-    st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name="finbert_results.csv",
-        mime="text/csv"
-    )
+    export_results_to_csv(ranked, "finbert_results.csv")
+    st.success("CSV updated!")
