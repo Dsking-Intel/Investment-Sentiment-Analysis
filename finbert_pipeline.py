@@ -47,11 +47,11 @@ def load_models():
     ).to(device)
 
     embed_tokenizer = AutoTokenizer.from_pretrained(
-        "BAAI/bge-large-en-v1.5"
+        "sentence-transformers/all-MiniLM-L6-v2"
     )
 
     embed_model = AutoModel.from_pretrained(
-        "BAAI/bge-large-en-v1.5"
+        "sentence-transformers/all-MiniLM-L6-v2"
     ).to(device)
 
     return (
