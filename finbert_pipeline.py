@@ -754,41 +754,6 @@ def _strip_dollar_signs(fig):
                 t.set_text(txt.replace("$", ""))
 
 # ============================================================
-# CLUSTER SUMMARY
-# ============================================================
-
-#def generate_cluster_summary_llm(
-#    cluster_name,
-#    headlines,
-#    sentiment_cache
-#):
-    text = "\n".join(headlines[:10])
-
-    prompt = f"""
-    You are a financial analyst.
-
-    Topic: {cluster_name}
-
-    Headlines:
-    {text}
-
-    Summarise:
-    1. Main theme
-    2. Market implications
-    3. Overall sentiment
-
-    Keep the answer under 100 words.
-    """
-
-    result = summary_model(
-        prompt,
-        max_new_tokens=120,
-        do_sample=False
-    )
-
-    return result[0]["generated_text"]
-
-# ============================================================
 # CLUSTER SENTIMENT HEATMAP
 # ============================================================
 def plot_cluster_sentiment_heatmap(results, cluster_names):
@@ -1017,11 +982,3 @@ if __name__ == "__main__":
     plot_cluster_sentiment_heatmap(results, cluster_names)
   
     
-    csv = df.to_csv(index=False).encode("utf-8")
-
-    st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name="finbert_results.csv",
-        mime="text/csv"
-    )
