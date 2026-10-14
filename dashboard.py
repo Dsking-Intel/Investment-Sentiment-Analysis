@@ -35,6 +35,7 @@ if st.button("Run Analysis"):
     # Fetch + clean headlines
     diagnostics, combined = run_all_feed_checks()
     combined = sanitize_headlines(dedupe_headlines(combined))
+    combined = combined[:150]
     st.info(f"Fetched {len(combined)} headlines from all sources.")
 
     # Show feed diagnostics in Streamlit
@@ -146,11 +147,13 @@ if st.button("Run Analysis"):
         st.subheader("Relevance vs Sentiment Confidence")
         fig1 = plot_relevance_vs_sentiment(results, cluster_colors)
         st.pyplot(fig1)
+        plt.close(fig1)
 
     with col2:
         st.subheader("Cluster Sentiment Heatmap")
         fig2 = plot_cluster_sentiment_heatmap(results, cluster_names)
         st.pyplot(fig2)
+        plt.close(fig2)
 
 
     col3, col4 = st.columns(2)
@@ -159,11 +162,13 @@ if st.button("Run Analysis"):
         st.subheader("Cluster Sentiment Distribution")
         fig3 = plot_cluster_sentiment_distribution(results, cluster_names)
         st.pyplot(fig3)
+        plt.close(fig3)
 
     with col4:
         st.subheader("Cluster Relevance Boxplot")
         fig_box = plot_cluster_relevance_boxplot(results, cluster_names)
         st.pyplot(fig_box)
+        plt.close(fig_box)
 
     st.subheader("Cluster Keyword Clouds")
     cols = st.columns(3)
@@ -173,6 +178,7 @@ if st.button("Run Analysis"):
             st.markdown(f"### {cluster_names[cid]}")
             fig = plot_cluster_keyword_cloud({cid: clusters[cid]}, cluster_names)
             st.pyplot(fig)
+            plt.close(fig)
 
     # Source Contribution (pie)
 # ============================
@@ -201,6 +207,7 @@ if st.button("Run Analysis"):
        )
         ax.set_title("Source Contribution Share", fontsize=10)
         st.pyplot(fig_pie)
+        plt.close(fig_pie)
 
     with col6:
         st.markdown("### Source Sentiment Breakdown")
@@ -231,6 +238,7 @@ if st.button("Run Analysis"):
         ax.legend(fontsize=8)
 
         st.pyplot(fig_bar)
+        plt.close(fig_bar)
 
 
 # ============================
