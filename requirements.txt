@@ -9,3 +9,4 @@ torch
 sentencepiece
 wordcloud
 beautifulsoup4
+torchvision
