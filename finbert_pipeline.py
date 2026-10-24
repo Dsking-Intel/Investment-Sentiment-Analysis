@@ -16,6 +16,7 @@ matplotlib.rcParams['figure.autolayout'] = False
 import matplotlib.pyplot as plt
 import numpy as np
 from transformers import AutoModel, AutoTokenizer, AutoModelForSequenceClassification
+#from transformers import pipeline
 import torch.nn.functional as F
 import re
 from collections import Counter
@@ -32,14 +33,38 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # ============================================================
 # LOAD MODELS
 # ============================================================
-MODEL_NAME = "ProsusAI/finbert"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-finbert = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME).to(device)
-LABELS = ["negative", "neutral", "positive"]
+import streamlit as st
 
-embed_tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-large-en-v1.5")
-embed_model = AutoModel.from_pretrained("BAAI/bge-large-en-v1.5").to(device)
+@st.cache_resource
+def load_models():
 
+    tokenizer = AutoTokenizer.from_pretrained(
+        "ProsusAI/finbert"
+    )
+
+    finbert = AutoModelForSequenceClassification.from_pretrained(
+        "ProsusAI/finbert"
+    ).to(device)
+
+    embed_tokenizer = AutoTokenizer.from_pretrained(
+        "sentence-transformers/all-MiniLM-L6-v2"
+    )
+
+    embed_model = AutoModel.from_pretrained(
+        "sentence-transformers/all-MiniLM-L6-v2"
+    ).to(device)
+
+    return (
+        tokenizer,
+        finbert,
+        embed_tokenizer,
+        embed_model
+    )
+
+    tokenizer = None
+    finbert = None
+    embed_tokenizer = None
+    embed_model = None
 
 # ============================================================
 # FEED HEALTH CHECK
@@ -447,7 +472,7 @@ def compute_embeddings(headlines, batch_size=64):
     emb_dict = {}
     for i in range(0, len(headlines), batch_size):
         batch = headlines[i:i+batch_size]
-        inputs = tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
+        inputs = embed_tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
 
@@ -574,7 +599,7 @@ def name_clusters(clusters, emb_cache):
 def compute_topic_embeddings():
     topic_embs = {}
     for topic, phrases in semantic_topics.items():
-        inputs = tokenizer(
+        inputs = embed_tokenizer(
             phrases,
             return_tensors="pt",
             truncation=True,
@@ -590,7 +615,7 @@ def compute_topic_embeddings():
 
     return topic_embs
 
-topic_embeddings = compute_topic_embeddings()
+topic_embeddings = {}
 
 
 def compute_cluster_centroid(cluster_headlines, emb_cache):
@@ -745,7 +770,6 @@ def _strip_dollar_signs(fig):
             txt = t.get_text()
             if txt and "$" in txt:
                 t.set_text(txt.replace("$", ""))
-
 
 # ============================================================
 # CLUSTER SENTIMENT HEATMAP
@@ -909,6 +933,79 @@ def plot_cluster_keyword_cloud(clusters, cluster_names):
     return fig
 
 # ============================================================
+# EXECUTIVE SUMMARY
+# ============================================================
+
+def generate_executive_summary(results, clusters, cluster_names):
+
+    total_headlines = len(results)
+
+    positive = sum(
+        1 for r in results
+        if r["label"] == "positive"
+    )
+
+    neutral = sum(
+        1 for r in results
+        if r["label"] == "neutral"
+    )
+
+    negative = sum(
+        1 for r in results
+        if r["label"] == "negative"
+    )
+
+    overall_sentiment = max(
+        {
+            "Positive": positive,
+            "Neutral": neutral,
+            "Negative": negative
+        },
+        key=lambda x: {
+            "Positive": positive,
+            "Neutral": neutral,
+            "Negative": negative
+        }[x]
+    )
+
+    largest_cluster_id = max(
+        clusters,
+        key=lambda c: len(clusters[c])
+    )
+
+    largest_cluster = cluster_names[largest_cluster_id]
+
+    strongest_signals = sorted(
+        results,
+        key=lambda x: x["positive_prob"] * x["relevance"],
+        reverse=True
+    )[:3]
+
+    biggest_risks = sorted(
+        results,
+        key=lambda x: x["negative_prob"] * x["relevance"],
+        reverse=True
+    )[:3]
+
+    most_relevant = sorted(
+        results,
+        key=lambda x: x["relevance"],
+        reverse=True
+    )[:3]
+
+    return {
+        "total_headlines": total_headlines,
+        "overall_sentiment": overall_sentiment,
+        "largest_cluster": largest_cluster,
+        "positive": positive,
+        "neutral": neutral,
+        "negative": negative,
+        "strongest_signals": strongest_signals,
+        "biggest_risks": biggest_risks,
+        "most_relevant": most_relevant
+    }
+
+# ============================================================
 # MAIN
 # ============================================================
 if __name__ == "__main__":
@@ -976,11 +1073,3 @@ if __name__ == "__main__":
     plot_cluster_sentiment_heatmap(results, cluster_names)
   
     
-    csv = df.to_csv(index=False).encode("utf-8")
-
-    st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name="finbert_results.csv",
-        mime="text/csv"
-    )
