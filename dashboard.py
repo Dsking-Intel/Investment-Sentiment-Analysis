@@ -101,13 +101,13 @@ if st.button("Run Analysis"):
 
         st.dataframe(
             df[
-            [
-                "text",
-                "cluster_name",
-                "label",
-                "relevance",
-                "confidence"
-            ]
+                [
+                    "text",
+                    "cluster_name",
+                    "label",
+                    "relevance",
+                    "confidence"
+                ]
         ].head(25)
     )
 
