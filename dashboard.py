@@ -59,7 +59,7 @@ if st.button("Run Analysis"):
 
     # Clustering
     vectors = list(emb_cache.values())
-    n_clusters = min(4, len(vectors))
+    n_clusters = min(8, len(vectors))
 
     from sklearn.cluster import KMeans
     kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(vectors)
