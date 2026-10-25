@@ -101,7 +101,7 @@ if st.button("Run Analysis"):
 
     sentiment_filter = st.selectbox(
         "Sentiment Filter",
-        ["All", "Positive", "Negative", "Neutral"]
+        ["All", "positive", "negative", "neutral"]
     )
 
     filtered_df = df.copy()
