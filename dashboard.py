@@ -32,10 +32,10 @@ question = st.text_input("Enter your financial question:", "What is happening wi
 
 run_analysis = st.button("Run Analysis")
 
-    if run_analysis:
-        st.session_state["run_analysis"] = True
+if run_analysis:
+    st.session_state["run_analysis"] = True
 
-    if st.session_state.get("run_analysis", False):
+if st.session_state.get("run_analysis", False):
 
     # Fetch + clean headlines
     diagnostics, combined = run_all_feed_checks()
