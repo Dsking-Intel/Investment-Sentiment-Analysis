@@ -97,6 +97,20 @@ if st.button("Run Analysis"):
 
     df = pd.DataFrame(ranked)
 
+    st.subheader("Top Relevant Headlines")
+
+        st.dataframe(
+            df[
+            [
+                "text",
+                "cluster_name",
+                "label",
+                "relevance",
+                "confidence"
+            ]
+        ].head(25)
+    )
+
     # Executive Summary
     
     executive = generate_executive_summary(
