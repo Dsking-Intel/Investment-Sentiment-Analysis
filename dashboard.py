@@ -106,7 +106,7 @@ if st.button("Run Analysis"):
 
     filtered_df = df.copy()
 
-        if sentiment_filter != "All":
+    if sentiment_filter != "All":
         filtered_df = filtered_df[
             filtered_df["label"] == sentiment_filter.lower()
         ]
@@ -122,6 +122,7 @@ if st.button("Run Analysis"):
             ]
         ].head(21)
     )
+
 
     # Executive Summary
     
