@@ -102,8 +102,6 @@ if st.session_state.get("run_analysis", False):
 
     df = pd.DataFrame(ranked)
 
-    st.write("Labels found:", df["label"].unique())
-
     st.subheader("Top Relevant Headlines")
 
     sentiment_filter = st.selectbox(
