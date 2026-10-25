@@ -469,6 +469,8 @@ def compute_embeddings(headlines, batch_size=64):
     emb_dict = {}
     for i in range(0, len(headlines), batch_size):
         batch = headlines[i:i+batch_size]
+        print(type(embed_tokenizer))
+        print(embed_tokenizer)
         inputs = embed_tokenizer(batch, return_tensors="pt", truncation=True, padding=True)
         inputs = {k: v.to(device) for k, v in inputs.items()}
 
