@@ -28,7 +28,7 @@ from finbert_pipeline import (
 st.set_page_config(layout="wide", page_title="Financial Intelligence Dashboard")
 st.title("📊 Financial Intelligence Dashboard")
 
-question = st.text_input("What's your question on the fiancial market?", "For example, what is happening with the stock market?")
+question = st.text_input("What is your question on the financial markets ?", "For example, what is happening with the stock market ?")
 
 run_analysis = st.button("Run Analysis")
 
