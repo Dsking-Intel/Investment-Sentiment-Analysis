@@ -99,8 +99,20 @@ if st.button("Run Analysis"):
 
     st.subheader("Top Relevant Headlines")
 
+    sentiment_filter = st.selectbox(
+        "Sentiment Filter",
+        ["All", "Positive", "Negative", "Neutral"]
+    )
+
+    filtered_df = df.copy()
+
+        if sentiment_filter != "All":
+        filtered_df = filtered_df[
+            filtered_df["label"] == sentiment_filter.lower()
+        ]
+
     st.dataframe(
-        df[
+        filtered_df[
             [
                 "text",
                 "cluster_name",
@@ -108,7 +120,7 @@ if st.button("Run Analysis"):
                 "relevance",
                 "confidence"
             ]
-        ].head(25)
+        ].head(21)
     )
 
     # Executive Summary
