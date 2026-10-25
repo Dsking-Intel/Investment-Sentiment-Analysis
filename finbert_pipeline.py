@@ -1049,7 +1049,6 @@ if __name__ == "__main__":
 
     cluster_map = {h: label for h, label in zip(combined, labels)}
 
-    global topic_embeddings
     topic_embeddings = compute_topic_embeddings()
     
     cluster_names = name_clusters(clusters, emb_cache)
