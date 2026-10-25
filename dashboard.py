@@ -99,17 +99,17 @@ if st.button("Run Analysis"):
 
     st.subheader("Top Relevant Headlines")
 
-        st.dataframe(
-            df[
-                [
-                    "text",
-                    "cluster_name",
-                    "label",
-                    "relevance",
-                    "confidence"
-                ]
-            ].head(25)
-        )
+    st.dataframe(
+        df[
+            [
+                "text",
+                "cluster_name",
+                "label",
+                "relevance",
+                "confidence"
+            ]
+        ].head(25)
+    )
 
     # Executive Summary
     
