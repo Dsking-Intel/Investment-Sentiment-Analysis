@@ -35,7 +35,7 @@ if st.button("Run Analysis"):
     # Fetch + clean headlines
     diagnostics, combined = run_all_feed_checks()
     combined = sanitize_headlines(dedupe_headlines(combined))
-    combined = combined[:300]
+    combined = combined[:500]
     st.info(f"Fetched {len(combined)} headlines from all sources.")
 
     # Show feed diagnostics in Streamlit
