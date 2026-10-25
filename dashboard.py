@@ -97,6 +97,8 @@ if st.button("Run Analysis"):
 
     df = pd.DataFrame(ranked)
 
+    st.write("Labels found:", df["label"].unique())
+
     st.subheader("Top Relevant Headlines")
 
     sentiment_filter = st.selectbox(
@@ -108,7 +110,8 @@ if st.button("Run Analysis"):
 
     if sentiment_filter != "All":
         filtered_df = filtered_df[
-            filtered_df["label"] == sentiment_filter.lower()
+            filtered_df["label"].astype(str).str.lower().str.strip()
+            == sentiment_filter.lower()
         ]
 
     st.dataframe(
