@@ -101,12 +101,12 @@ if st.button("Run Analysis"):
 
     sentiment_filter = st.selectbox(
         "Sentiment Filter",
-        ["All", "positive", "negative", "neutral"]
+        ["All", "Positive", "Negative", "Neutral"]
     )
 
     filtered_df = df.copy()
 
-    if sentiment_filter != "All":
+    if sentiment_filter != "Positive":
         filtered_df = filtered_df[
             filtered_df["label"] == sentiment_filter.lower()
         ]
