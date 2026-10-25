@@ -248,6 +248,14 @@ def run_all_feed_checks():
     all_headlines.extend(fetch_economist())
     all_headlines.extend(fetch_institutional_investor())
 
+    all_headlines.extend(fetch_techcrunch())
+    all_headlines.extend(fetch_venturebeat())
+    all_headlines.extend(fetch_oilprice())
+    all_headlines.extend(fetch_prnews())
+    all_headlines.extend(fetch_nikkei())
+    all_headlines.extend(fetch_scmp())
+
+    print(f"Total headlines collected: {len(all_headlines)}")
     return diagnostics, all_headlines
 
 
