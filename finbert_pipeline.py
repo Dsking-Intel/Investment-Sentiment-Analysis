@@ -24,6 +24,12 @@ from wordcloud import WordCloud
 from sklearn.feature_extraction.text import CountVectorizer
 from bs4 import BeautifulSoup
 
+LABELS = [
+    "negative",
+    "neutral",
+    "positive"
+]
+
 
 # ============================================================
 # DEVICE
