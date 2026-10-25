@@ -61,10 +61,7 @@ def load_models():
         embed_model
     )
 
-    tokenizer = None
-    finbert = None
-    embed_tokenizer = None
-    embed_model = None
+tokenizer, finbert, embed_tokenizer, embed_model = load_models()
 
 # ============================================================
 # FEED HEALTH CHECK
@@ -528,10 +525,8 @@ def compute_sentiments(headlines, batch_size=64):
 # OPTIMISED KEYWORD EXTRACTION (SAFE INDEXING)
 # ============================================================
 
-global_vectorizer = CountVectorizer(
-    ngram_range=(1, 3),
-    stop_words="english"
-)
+global_vectorizer = None
+
 def build_global_keyword_matrix(headlines):
     vectorizer = CountVectorizer(ngram_range=(1,3), stop_words="english")
     clean = [re.sub(r"\b\d+(\.\d+)?%?\b", "", h) for h in headlines]
@@ -620,8 +615,14 @@ topic_embeddings = {}
 
 def compute_cluster_centroid(cluster_headlines, emb_cache):
     vecs = [emb_cache[h] for h in cluster_headlines]
+
     centroid = np.mean(vecs, axis=0)
-    centroid = centroid / np.linalg.norm(centroid)
+
+    norm = np.linalg.norm(centroid)
+
+    if norm > 0:
+        centroid = centroid / norm
+
     return centroid
 
 def name_cluster_semantic(cluster_headlines, emb_cache):
@@ -1036,7 +1037,7 @@ if __name__ == "__main__":
     # --- Clustering ---
     global_matrix, cleaned_headlines, index_map, global_vectorizer = build_global_keyword_matrix(combined)
 
-    n_clusters = choose_optimal_k(vectors, k_min=3, k_max=10)
+    n_clusters = choose_optimal_k(vectors, k_min=3, k_max=7)
     kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(vectors)
     labels = kmeans.labels_
 
@@ -1045,6 +1046,9 @@ if __name__ == "__main__":
         clusters[label].append(h)
 
     cluster_map = {h: label for h, label in zip(combined, labels)}
+
+    global topic_embeddings
+    topic_embeddings = compute_topic_embeddings()
     
     cluster_names = name_clusters(clusters, emb_cache)
 
