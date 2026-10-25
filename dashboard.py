@@ -25,10 +25,10 @@ from finbert_pipeline import (
     export_results_to_csv
 )
 
-st.set_page_config(layout="wide", page_title="Darrell's Financial Intelligence Dashboard")
-st.title("📊 Darrell's Financial Intelligence Dashboard")
+st.set_page_config(layout="wide", page_title="Financial Intelligence Dashboard")
+st.title("📊 Financial Intelligence Dashboard")
 
-question = st.text_input("Enter your financial question:", "What is happening with the stock market?")
+question = st.text_input("What's your question on the fiancial market?", "For example, what is happening with the stock market?")
 
 run_analysis = st.button("Run Analysis")
 
