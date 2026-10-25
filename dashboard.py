@@ -108,8 +108,8 @@ if st.button("Run Analysis"):
                     "relevance",
                     "confidence"
                 ]
-        ].head(25)
-    )
+            ].head(25)
+        )
 
     # Executive Summary
     
